@@ -1,11 +1,16 @@
 package com.example.coach.controleur;
 
+import android.content.Context;
+
 import com.example.coach.modele.Profil;
+import com.example.coach.outils.Serializer;
 
 public final class Controle {
 
     private static Controle instance;
     private Profil profil;
+    private String fileName = "saveprofil";
+
 
     /**
      * Crée l'instance unique de la classe Singleton du contrôleur.
@@ -18,10 +23,12 @@ public final class Controle {
      * Récupère l'instance unique du contrôleur.
      * @return L'objet Contrôleur unique.
      */
-    public static Controle getInstance(){
+    public static Controle getInstance(Context context){
         if(instance == null){
             Controle.instance = new Controle();
+            instance.getSerial(context);
         }
+
         return Controle.instance;
     }
 
@@ -32,8 +39,9 @@ public final class Controle {
      * @param age Âge entré.
      * @param sexe Sexe entré (0: Femme ou 1: Homme)
      */
-    public void creerProfil(Integer taille, Integer poids, Integer age, Integer sexe){
+    public void creerProfil(Integer taille, Integer poids, Integer age, Integer sexe, Context context){
         profil = new Profil(taille, poids, age, sexe);
+        Serializer.serialize(fileName, profil, context);
     }
 
     /**
@@ -47,7 +55,32 @@ public final class Controle {
 
     public String getMessage(){
         if(profil != null) return profil.getMessage();
-        return "";
+        return null;
     }
 
+    public int getPoids(){
+        if(profil != null) return profil.getPoids();
+        return 0;
+    }
+
+    public int getTaille(){
+        if(profil != null) return profil.getTaille();
+        return 0;
+    }
+
+    public int getAge(){
+        if(profil != null) return profil.getAge();
+        return 0;
+    }
+
+    public int getSexe(){
+        if(profil != null) return profil.getSexe();
+        return 1;
+    }
+
+
+
+    public void getSerial(Context context) {
+        profil = (Profil) Serializer.deSerialize(fileName, context);
+    }
 }

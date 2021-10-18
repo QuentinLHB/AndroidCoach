@@ -50,9 +50,23 @@ public class MainActivity extends AppCompatActivity {
         lblImg = (ImageView) findViewById(R.id.lblIMG);
         lblMessage = (TextView) findViewById(R.id.lblMessage);
         btnCalcul = (Button) findViewById(R.id.btnCalc);
-        controle = Controle.getInstance();
+        controle = Controle.getInstance(this);
         calculListener();
+        recupProfil();
 
+    }
+
+    private void recupProfil(){
+        controle.getSerial(this);
+        remplireSiNonVide(controle.getPoids(), txtPoids);
+        remplireSiNonVide(controle.getTaille(), txtTaille);
+        remplireSiNonVide(controle.getAge(), txtAge);
+        if(controle.getSexe() == 0) rdFemme.setChecked(true);
+        btnCalcul.performClick();
+    }
+
+    private void remplireSiNonVide(int valeur, EditText widget){
+        if(valeur != 0) widget.setText(String.valueOf(valeur));
     }
 
     private void calculListener(){
@@ -81,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void affichResult(Integer taille, Integer poids, Integer age, Integer sexe) {
-        controle.creerProfil(taille, poids, age, sexe);
+        controle.creerProfil(taille, poids, age, sexe, this);
         String msgLbl = controle.getImg() + " : ";
         String msgImg = controle.getMessage();
         int color;
@@ -92,8 +106,9 @@ public class MainActivity extends AppCompatActivity {
                 color = Color.RED;
             break;
             case Profil.GRAS: msgLbl += "IMG trop élevée.";
-                imgResource = R.drawable.maigre;
+                imgResource = R.drawable.graisse;
                 color = Color.RED;
+                break;
             default: msgLbl += "IMG normale";
                 imgResource = R.drawable.normal;
                 color = Color.GREEN;

@@ -1,6 +1,8 @@
 package com.example.coach.modele;
 
-public class Profil {
+import java.io.Serializable;
+
+public class Profil implements Serializable {
 
     // constantes
     private static final Integer minFemme = 15; // maigre si en dessous
