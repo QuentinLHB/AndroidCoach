@@ -57,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void recupProfil(){
-        controle.getSerial(this);
+//        controle.getSerial(this); Remplacé par SQLite
+
         remplireSiNonVide(controle.getPoids(), txtPoids);
         remplireSiNonVide(controle.getTaille(), txtTaille);
         remplireSiNonVide(controle.getAge(), txtAge);
