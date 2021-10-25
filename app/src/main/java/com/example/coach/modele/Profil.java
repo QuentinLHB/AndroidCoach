@@ -1,7 +1,11 @@
 package com.example.coach.modele;
 
+import org.json.JSONArray;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Profil implements Serializable {
 
@@ -113,5 +117,16 @@ public class Profil implements Serializable {
 
     public Date getDateMesure() {
         return dateMesure;
+    }
+
+    public JSONArray convertToJSONArray(){
+        List list = new ArrayList();
+        list.add(dateMesure);
+        list.add(poids);
+        list.add(taille);
+        list.add(age);
+        list.add(sexe);
+        return new JSONArray(list);
+
     }
 }

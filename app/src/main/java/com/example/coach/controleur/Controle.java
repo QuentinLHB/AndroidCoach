@@ -2,9 +2,12 @@ package com.example.coach.controleur;
 
 import android.content.Context;
 
+import com.example.coach.modele.AccesDistant;
 import com.example.coach.modele.AccesLocal;
 import com.example.coach.modele.Profil;
 import com.example.coach.outils.Serializer;
+
+import org.json.JSONArray;
 
 import java.util.Date;
 
@@ -14,6 +17,7 @@ public final class Controle {
     private Profil profil;
     private String fileName = "saveprofil";
     private static AccesLocal accesLocal;
+//    private static AccesDistant accesDistant;
 
 
     /**
@@ -34,7 +38,8 @@ public final class Controle {
         }
         Controle.accesLocal = new AccesLocal(context);
         instance.profil = accesLocal.recupDernier();
-
+//        accesDistant = new AccesDistant() ;
+//        accesDistant.envoi("dernier", new JSONArray());
         return Controle.instance;
     }
 
@@ -49,6 +54,8 @@ public final class Controle {
         profil = new Profil(taille, poids, age, sexe, new Date());
 //        Serializer.serialize(fileName, profil, context);
          accesLocal.ajout(profil);
+
+//        accesDistant.envoi("enreg", profil.convertToJSONArray());
     }
 
     /**
