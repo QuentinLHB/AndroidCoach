@@ -31,7 +31,6 @@ public class CalculActivity extends AppCompatActivity {
     private Controle controle;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,9 +58,12 @@ public class CalculActivity extends AppCompatActivity {
 
     }
 
-    private void retourListener(){
+    /**
+     * Crée l'event listener du bouton Retour.
+     */
+    private void retourListener() {
         ImageButton imgRetour = findViewById(R.id.imgRetourDeCalcul);
-        imgRetour.setOnClickListener(new Button.OnClickListener(){
+        imgRetour.setOnClickListener(new Button.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -73,21 +75,32 @@ public class CalculActivity extends AppCompatActivity {
     }
 
 
-    private void recupProfil(){
+    /**
+     * Récupère les informations du profil enregistré dans le contrôleur et l'affiche.
+     */
+    private void recupProfil() {
 //        controle.getSerial(this); Remplacé par SQLite
-
         remplireSiNonVide(controle.getPoids(), txtPoids);
         remplireSiNonVide(controle.getTaille(), txtTaille);
         remplireSiNonVide(controle.getAge(), txtAge);
-        if(controle.getSexe() == 0) rdFemme.setChecked(true);
-        btnCalcul.performClick();
+        if (controle.getSexe() == 0) rdFemme.setChecked(true);
+//        btnCalcul.performClick();
+        controle.setProfil(null);
     }
 
-    private void remplireSiNonVide(int valeur, EditText widget){
-        if(valeur != 0) widget.setText(String.valueOf(valeur));
+    /**
+     * Remplit un widget avec une valeur numérique entière non-nulle.
+     * @param valeur Entier à afficher
+     * @param widget Widget dans lequel afficher la valeur.
+     */
+    private void remplireSiNonVide(int valeur, EditText widget) {
+        if (valeur != 0) widget.setText(String.valueOf(valeur));
     }
 
-    private void calculListener(){
+    /**
+     * Crée l'event listener sur le bouton effectuant le calcul.
+     */
+    private void calculListener() {
         btnCalcul.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,16 +108,17 @@ public class CalculActivity extends AppCompatActivity {
                 int taille = 0;
                 int age = 0;
 
-                try{
+                try {
                     poids = Integer.parseInt(txtPoids.getText().toString());
                     taille = Integer.parseInt(txtTaille.getText().toString());
                     age = Integer.parseInt(txtAge.getText().toString());
-                }catch (Exception e){}
+                } catch (Exception e) {
+                }
 
                 int sexe = 0;
-                if(rdHomme.isChecked()) sexe = 1;
+                if (rdHomme.isChecked()) sexe = 1;
 
-                if(poids == 0 || taille == 0 || age == 0)
+                if (poids == 0 || taille == 0 || age == 0)
                     Toast.makeText(CalculActivity.this, "Merci de remplir tous les champs.", Toast.LENGTH_SHORT).show();
                 else
                     affichResult(taille, poids, age, sexe);
@@ -112,22 +126,32 @@ public class CalculActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Crée le profil en fonction des infos remplies et affiche le résultat du calcul.
+     * @param taille Taille enregistrée.
+     * @param poids Poids enregistré.
+     * @param age Âge enregistré.
+     * @param sexe Sexe enregistré (0: femme, 1:homme).
+     */
     private void affichResult(Integer taille, Integer poids, Integer age, Integer sexe) {
         controle.creerProfil(taille, poids, age, sexe, this);
-        String msgLbl = controle.getImg() + " : ";
+        String msgLbl = controle.getImg2Decimal() + " : ";
         String msgImg = controle.getMessage();
         int color;
         int imgResource;
-        switch (msgImg){
-            case Profil.MAIGRE: msgLbl += "IMG trop faible.";
+        switch (msgImg) {
+            case Profil.MAIGRE:
+                msgLbl += "IMG trop faible.";
                 imgResource = R.drawable.maigre;
                 color = Color.RED;
-            break;
-            case Profil.GRAS: msgLbl += "IMG trop élevée.";
+                break;
+            case Profil.GRAS:
+                msgLbl += "IMG trop élevée.";
                 imgResource = R.drawable.graisse;
                 color = Color.RED;
                 break;
-            default: msgLbl += "IMG normale";
+            default:
+                msgLbl += "IMG normale";
                 imgResource = R.drawable.normal;
                 color = Color.GREEN;
                 break;

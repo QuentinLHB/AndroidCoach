@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Coach">
         <activity
+            android:name=".vue.HistoActivity"
+            android:exported="false" />
+        <activity
             android:name=".vue.MainActivity"
             android:exported="true">
             <intent-filter>
@@ -22,9 +25,7 @@
         </activity>
         <activity
             android:name=".vue.CalculActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"></activity>
     </application>
 
 </manifest>

@@ -22,4 +22,8 @@ public abstract class MesOutils {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return dateFormat.format(date);
     }
+
+    public static String format2Decimal(float img){
+        return String.format("%.01f", img);
+    }
 }

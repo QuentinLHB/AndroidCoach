@@ -5,16 +5,21 @@ import android.content.Context;
 import com.example.coach.modele.AccesDistant;
 import com.example.coach.modele.AccesLocal;
 import com.example.coach.modele.Profil;
+import com.example.coach.outils.MesOutils;
 import com.example.coach.outils.Serializer;
 
 import org.json.JSONArray;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public final class Controle {
 
     private static Controle instance;
+
+
     private Profil profil;
+    private ArrayList<Profil> lesProfils;
     private String fileName = "saveprofil";
     private static AccesLocal accesLocal;
 //    private static AccesDistant accesDistant;
@@ -35,16 +40,17 @@ public final class Controle {
         if(instance == null){
             Controle.instance = new Controle();
 //            instance.getSerial(context);
-        }
-        Controle.accesLocal = new AccesLocal(context);
-        instance.profil = accesLocal.recupDernier();
+            Controle.accesLocal = new AccesLocal(context);
+//        instance.profil = accesLocal.recupDernier();
+            instance.lesProfils = accesLocal.recupProfils();
 //        accesDistant = new AccesDistant() ;
 //        accesDistant.envoi("dernier", new JSONArray());
+        }
         return Controle.instance;
     }
 
     /**
-     * Crée le profil de l'utilisateur.
+     * Crée le profil de l'utilisateur et l'ajout dans la BDD.
      * @param taille Taille entrée.
      * @param poids Poids entré.
      * @param age Âge entré.
@@ -54,8 +60,15 @@ public final class Controle {
         profil = new Profil(taille, poids, age, sexe, new Date());
 //        Serializer.serialize(fileName, profil, context);
          accesLocal.ajout(profil);
+         lesProfils.add(profil);
 
 //        accesDistant.envoi("enreg", profil.convertToJSONArray());
+    }
+
+    public void supprProfil(Profil profil){
+        accesLocal.supprProfil(profil);
+        lesProfils.remove(profil);
+
     }
 
     /**
@@ -67,9 +80,13 @@ public final class Controle {
         return 0;
     }
 
+    public String getImg2Decimal(){
+        return MesOutils.format2Decimal(getImg());
+    }
+
     public String getMessage(){
         if(profil != null) return profil.getMessage();
-        return null;
+        return "";
     }
 
     public int getPoids(){
@@ -92,9 +109,25 @@ public final class Controle {
         return 1;
     }
 
-    public void getSerial(Context context) {
-        profil = (Profil) Serializer.deSerialize(fileName, context);
+    public void setLesProfils(ArrayList<Profil> lesProfils) {
+        this.lesProfils = lesProfils;
     }
+
+    public void setProfil(Profil profil){
+        this.profil = profil;
+    }
+
+    /**
+     *
+     * @return La liste des profils récupérés dans la BDD locale.
+     */
+    public ArrayList<Profil> getLesProfils() {
+        return lesProfils;
+    }
+
+//    public void getSerial(Context context) {
+//        profil = (Profil) Serializer.deSerialize(fileName, context);
+//    }
 
 
 }

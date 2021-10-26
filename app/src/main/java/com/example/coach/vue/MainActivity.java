@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.example.coach.R;
+import com.example.coach.controleur.Controle;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,15 +17,26 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Controle.getInstance(this);
         creerMenu();
     }
 
-    private void creerMenu(){
+    /**
+     * Crée les listeners pointant vers les activités.
+     */
+    private void creerMenu() {
         ButtonListener(findViewById(R.id.imgMonIMG), CalculActivity.class);
+        ButtonListener(findViewById(R.id.imgMonHisto), HistoActivity.class);
     }
 
-    private void ButtonListener(ImageButton imgBtn, Class classe){
-        imgBtn.setOnClickListener(new Button.OnClickListener(){
+    /**
+     * Crée un listener sur un ImageButton, dont l'action ferme l'activity en cours et en ouvre une autre.
+     *
+     * @param imgBtn ImageButton sur laquelle appuyer.
+     * @param classe Classe de l'Activity à ouvrir après le clic.
+     */
+    private void ButtonListener(ImageButton imgBtn, Class classe) {
+        imgBtn.setOnClickListener(new Button.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -32,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }
-
         });
     }
 }

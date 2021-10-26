@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Profil implements Serializable {
+public class Profil implements Serializable, Comparable {
 
     // constantes
     private static final Integer minFemme = 15; // maigre si en dessous
@@ -85,6 +85,11 @@ public class Profil implements Serializable {
         resultIMG();
     }
 
+    @Override
+    public int compareTo(Object o) {
+        return dateMesure.compareTo(((Profil)o).getDateMesure());
+    }
+
     /**
      * Calcule l'Indice de masse Graisseuse.
      * Formule du calcul : IMG = (1,2 * Poids/Taille²) + (0,23 * age) - (10,83 * S) - 5,4
@@ -93,6 +98,7 @@ public class Profil implements Serializable {
     private void calculIMG(){
         float tailleM = (float)taille/100;
         img = Double.valueOf(1.2 * (poids / Math.pow(tailleM, 2)) + 0.23 * age - 10.83 * sexe - 5.4).floatValue();
+
     }
 
     /**
@@ -112,7 +118,7 @@ public class Profil implements Serializable {
     private String messageIMG(int seuilBas, int seuilHaut){
         if(img < seuilBas) return MAIGRE;
         else if(img < seuilHaut) return NORMAL;
-            else return GRAS;
+        else return GRAS;
     }
 
     public Date getDateMesure() {
@@ -129,4 +135,5 @@ public class Profil implements Serializable {
         return new JSONArray(list);
 
     }
+
 }
